@@ -1,0 +1,25 @@
+{
+  "name": "movie-discovery",
+  "version": "1.0.0",
+  "description": "A full-stack movie discovery application built with React, Express, MongoDB, and the TMDB API.",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install:all": "npm install && cd frontend && npm install && cd ../server && npm install",
+    "dev": "npm run dev:frontend & npm run dev:backend",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd server && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "start:backend": "cd server && npm run start",
+    "test": "npm run build:frontend && echo \"Frontend build successful\" && exit 0"
+  },
+  "keywords": [
+    "react",
+    "express",
+    "mongodb",
+    "tmdb",
+    "full-stack"
+  ],
+  "author": "",
+  "license": "ISC"
+}
