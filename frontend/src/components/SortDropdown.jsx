@@ -6,14 +6,9 @@ function SortDropdown({ sortBy, onSortChange }) {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const value = e.target.value;
-    const newParams = new URLSearchParams(params.toString());
-    newParams.set('sort', value);
-    setParams(newParams);
-    onSortChange(value);
-    navigate({ pathname: navigate().pathname, search: newParams.toString() });
-  };
-
+  const value = e.currentTarget.value;
+  onSortChange(value);
+};
   return (
     <div className="relative">
       <button

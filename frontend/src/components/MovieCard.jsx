@@ -29,7 +29,7 @@ function MovieCard({ movie }) {
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
           />
         </div>
-        <div className="p-4">
+        <div className="p-3 sm:p-4">
           <h3 className="line-clamp-2 text-sm font-semibold text-cinematic-50">
             {movie.title}
           </h3>

@@ -6,6 +6,7 @@ import {
   searchMovies,
   getMovieById,
   getSimilarMovies,
+  discoverMovies,
 } from '../services/tmdb.js';
 import { get, set } from '../services/cache.js';
 import logger from '../utils/logger.js';
@@ -115,6 +116,19 @@ export const similar = async (req, res, next) => {
     const { id } = req.params;
     const { page } = extractPagination(req);
     const data = await getSimilarMovies(Number(id), page);
+    res.json({ success: true, data });
+  } catch (err) {
+    next(err);
+  }
+};
+export const discover = async (req, res, next) => {
+  try {
+    const { page } = extractPagination(req);
+    const genre = req.query.genre || '';
+    const year = req.query.year || '';
+
+    const data = await discoverMovies(page, genre, year);
+
     res.json({ success: true, data });
   } catch (err) {
     next(err);

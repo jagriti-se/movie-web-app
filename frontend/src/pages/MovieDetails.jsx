@@ -30,8 +30,8 @@ function MovieDetails() {
         ]);
 
         if (!ignore) {
-          setMovie(detailsRes);
-          setSimilar(similarRes.results || []);
+          setMovie(detailsRes.data);
+          setSimilar(similarRes.data.results || []);
         }
       } catch (err) {
         if (!ignore) {

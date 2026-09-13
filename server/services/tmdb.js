@@ -145,6 +145,31 @@ async function getSimilarMovies(id, page = 1) {
   };
 }
 
+async function discoverMovies(page = 1, genre = '', year = '') {
+  const params = { page };
+
+  if (genre) {
+    params.with_genres = genre;
+  }
+
+  if (year) {
+    params.primary_release_year = year;
+  }
+
+  const response = await tmdbClient.get('/discover/movie', {
+    params,
+  });
+
+  const genreMap = await fetchGenreMap().catch(() => ({ genres: [] }));
+
+  return {
+    page: response.data.page,
+    results: (response.data.results || []).map((m) =>
+      transformMovie(m, genreMap)
+    ),
+    totalResults: response.data.total_results,
+  };
+}
 export {
   getTrending,
   getPopular,
@@ -153,5 +178,6 @@ export {
   searchMovies,
   getMovieById,
   getSimilarMovies,
+  discoverMovies,
   transformMovie,
 };

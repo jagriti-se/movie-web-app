@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 function Navbar() {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
+  const [inputValue, setInputValue] = useState(query);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <nav className="border-b border-cinematic-700 bg-cinematic-900/80 backdrop-blur">
@@ -45,11 +47,10 @@ function Navbar() {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                const input = e.target.elements.q;
-                if (input.value.trim()) {
-                  window.location.href = `/search?q=${encodeURIComponent(
-                    input.value.trim()
-                  )}`;
+                if (inputValue.trim()) {
+                   window.location.href = `/search?q=${encodeURIComponent(
+                    inputValue.trim()
+                 )}`;
                 }
               }}
               className="relative w-full max-w-xs"
@@ -75,7 +76,8 @@ function Navbar() {
                 id="search-input"
                 type="text"
                 name="q"
-                value={query}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Search movies..."
                 className="block w-full pl-10 pr-3 py-2 text-base border-cinematic-700 bg-cinematic-800 rounded-md focus:outline-none focus:ring-2 focus:ring-accent-gold focus:border-transparent"
               />
@@ -101,10 +103,11 @@ function Navbar() {
 
         <div className="md:hidden">
           <button
-            type="button"
-            className="p-2 rounded-md text-cinematic-300 hover:text-cinematic-50"
-            aria-label="Open main menu"
-          >
+       type="button"
+       onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+       className="p-2 rounded-md text-cinematic-300 hover:text-cinematic-50"
+       aria-label="Open main menu"
+      >
             <svg
               className="h-6 w-6"
               viewBox="0 0 24 24"
@@ -121,6 +124,55 @@ function Navbar() {
           </button>
         </div>
       </div>
+{mobileMenuOpen && (
+  <div className="md:hidden border-t border-cinematic-700 bg-cinematic-900 px-4 py-4">
+    <div className="flex flex-col space-y-2">
+      <Link
+        to="/"
+        onClick={() => setMobileMenuOpen(false)}
+        className="rounded-md px-3 py-2 text-cinematic-200 hover:bg-cinematic-700"
+      >
+        Home
+      </Link>
+
+      <Link
+        to="/search"
+        onClick={() => setMobileMenuOpen(false)}
+        className="rounded-md px-3 py-2 text-cinematic-200 hover:bg-cinematic-700"
+      >
+        Discover
+      </Link>
+
+      <Link
+        to="/wishlist"
+        onClick={() => setMobileMenuOpen(false)}
+        className="rounded-md px-3 py-2 text-cinematic-200 hover:bg-cinematic-700"
+      >
+        Wishlist
+      </Link>
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (inputValue.trim()) {
+            window.location.href = `/search?q=${encodeURIComponent(
+              inputValue.trim()
+            )}`;
+          }
+        }}
+        className="pt-2"
+      >
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Search movies..."
+          className="w-full rounded-md border border-cinematic-700 bg-cinematic-800 px-3 py-2 text-base text-cinematic-100 focus:outline-none focus:ring-2 focus:ring-accent-gold"
+        />
+      </form>
+    </div>
+  </div>
+)}
     </nav>
   );
 }

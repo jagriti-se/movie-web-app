@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useSearchParams, useNavigate } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/useDebounce';
 import { movieApi } from '../services/api';
 import MovieGrid from '../components/MovieGrid';
@@ -10,10 +11,10 @@ import SortDropdown from '../components/SortDropdown';
 function SearchResults() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { q } = searchParams.toString();
+  const q = searchParams.get('q');
 
   const [query, setQuery] = useState(q || '');
-  const [debouncedQuery] = useDebounce(query, 300);
+  const debouncedQuery = useDebounce(query, 300);
 
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -35,8 +36,8 @@ function SearchResults() {
     movieApi
       .search(debouncedQuery, page, sortBy)
       .then((res) => {
-        setMovies(res.results || []);
-        setPage(res.page || 1);
+        setMovies(res.data.results || []);
+        setPage(res.data.page || 1);
         setLoading(false);
       })
       .catch((err) => {
@@ -60,9 +61,11 @@ function SearchResults() {
     setSortBy(value);
     const newPage = 1;
     setPage(newPage);
-    const newParams = new URLSearchParams(searchParams.toString().replace(`q=${encodeURIComponent(query)}`, ''));
+    const newParams = new URLSearchParams(searchParams);
     newParams.set('sort', value);
-    newParams.set('q', encodeURIComponent(query));
+    newParams.set('q', query);
+    
+    
     navigate({ pathname: '/search', search: newParams.toString() });
   };
 

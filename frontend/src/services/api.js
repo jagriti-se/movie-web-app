@@ -25,6 +25,8 @@ export const movieApi = {
     api.get(`/movies/search?q=${encodeURIComponent(query)}&page=${page}&sortBy=${encodeURIComponent(sortBy)}`),
   details: (id) => api.get(`/movies/${id}`),
   similar: (id, page = 1) => api.get(`/movies/${id}/similar?page=${page}`),
+  discover: (page = 1, genre = '', year = '') =>
+  api.get(`/movies/discover?page=${page}&genre=${encodeURIComponent(genre)}&year=${encodeURIComponent(year)}`),
 };
 
 export const wishlistApi = {
