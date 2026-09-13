@@ -12,12 +12,18 @@ export function useMovies(type = 'trending', page = 1, genre = '', year = '') {
 
     try {
       if (genre || year) {
-       const response = await movieApi.discover(page, genre, year);
-       setMovies(response.data?.results || []);
-       return;
-     }
-    
-const apiMap = {
+        const response = await movieApi.discover(page, genre, year);
+
+        setMovies((prevMovies) =>
+          page === 1
+            ? (response.data?.results || [])
+            : [...prevMovies, ...(response.data?.results || [])]
+        );
+
+        return;
+      }
+
+      const apiMap = {
         trending: movieApi.trending,
         popular: movieApi.popular,
         topRated: movieApi.topRated,
@@ -25,10 +31,18 @@ const apiMap = {
       };
 
       const api = apiMap[type];
-      if (!api) throw new Error(`Unknown movie type: ${type}`);
+
+      if (!api) {
+        throw new Error(`Unknown movie type: ${type}`);
+      }
 
       const response = await api(page);
-      setMovies(response.data?.results || []);
+
+      setMovies((prevMovies) =>
+        page === 1
+          ? (response.data?.results || [])
+          : [...prevMovies, ...(response.data?.results || [])]
+      );
     } catch (err) {
       setError(err.message);
     } finally {
